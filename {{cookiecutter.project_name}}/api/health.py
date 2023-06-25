@@ -4,7 +4,7 @@ from typing import Any, Dict
 from fastapi import APIRouter
 from fastapi_health import health
 
-from core import get_db_context
+from core import get_cache_context, get_db_context
 from core.logging import logger
 from schemas import FailingHealthResponseSchema, HealthResponseSchema
 
@@ -38,6 +38,12 @@ async def database():
         await db.connection()
 
 
+@healthcheck
+async def cache():
+    async with get_cache_context() as redis:
+        await redis.ping()
+
+
 responses = {
     200: {"model": HealthResponseSchema},
     503: {"model": FailingHealthResponseSchema},
@@ -45,7 +51,7 @@ responses = {
 router.add_api_route(
     "/health",
     health(
-        [database],
+        [database, cache],
         failure_handler=health_handler,
         success_handler=health_handler,
     ),
