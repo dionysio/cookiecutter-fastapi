@@ -1,0 +1,18 @@
+version: '3.6'
+services:
+  db:
+    image: postgres:latest
+    restart: on-failure
+    user: root
+    environment:
+      POSTGRES_DB: {{cookiecutter.project_name}}
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - ~/docker/{{cookiecutter.project_name}}/postgres:/var/lib/postgres/data
+    ports:
+      - "5432:5432"
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"

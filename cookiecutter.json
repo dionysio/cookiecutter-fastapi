@@ -1,0 +1,7 @@
+{
+    "project_name": "",
+    "name": "",
+    "secret_key": "{{ uuid4() }}",
+    "_extensions": ["cookiecutter.extensions.UUIDExtension"]
+
+}
